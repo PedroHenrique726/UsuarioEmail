@@ -10,17 +10,23 @@ public class Usuario {
 		Scanner sc = new Scanner(System.in);
 
 		try {
-		String email = "alisson@email.com";
+			String email = ""; 
 			boolean loginSucesso = false;
-			UsuarioDao usuario = (UsuarioDao) Naming.lookup("rmi://LOCALHOST:3333/Email");
-
-			/*System.out.println("========= Bem Vindo =========");
+			
+			//Conexï¿½o
+			UsuarioDao usuario = (UsuarioDao) Naming.lookup("rmi://LOCALHOST:3333/Email"); 
+			
+			System.out.println("========= Bem Vindo =========");
+			System.out.println("++ Dica: Para facilitar a navegaÃ§Ã£o vocÃª pode usar apenas a primeira letra da palavra. ++");
+			
+			
 			while (loginSucesso == false) {
 				System.out.println("Digite 'criar' para criar uma conta ou 'login' para efetuar login:");
 				String cliente = sc.nextLine().toLowerCase();
 				switch (cliente) {
-
+				//Criar conta
 				case "criar":
+				case "c":
 					System.out.println("Digite o seu nome: ");
 					String nome = sc.nextLine();
 					System.out.println("Digite seu e-mail: ");
@@ -30,7 +36,9 @@ public class Usuario {
 					String criar = usuario.criarUsuario(nome, senha, email1);
 					System.out.println(criar);
 					break;
+				//Login
 				case "login":
+				case "l":
 					System.out.println("Digite seu e-mail: ");
 					email = sc.nextLine();
 					System.out.println("Digite sua senha: ");
@@ -41,125 +49,137 @@ public class Usuario {
 						System.out.println("Email ou senha digitado errado!");
 					} else {
 						nome = usuario.findNameByEmail(email);
-						System.out.println("Login efetuado! Bem Vindo " + nome +"\n");
-
+						System.out.println("Login efetuado! Bem Vindo " + nome + "\n");
 					}
 					break;
 				}
 			}
-			*/
-			
 			//LOGIN EFETUADO
 			String cliente = "";
 			do {
-				
-				System.out.println("Digite 'Contatos' para ver opções os contatos, 'Emails' para ver opções de e-mail ou 'Desconectar'");
+
+				System.out.println(
+						"Digite 'Contatos' para ver opÃ§Ãµes os contatos, 'Emails' para ver opÃ§Ãµes de e-mail ou 'Desconectar'");
 				cliente = sc.nextLine().toLowerCase();
-				if(cliente.equals("contatos") || cliente.equals("contato")) {// opções de contatos
+				if (cliente.equals("contatos") || cliente.equals("c") || cliente.equals("contato")) {
+																										// 
 					do {
-						System.out.println("Digite 'Consultar', 'Adicionar' ou 'Apagar' para fazer alterações nos contatos ou digite 'voltar'");
+						System.out.println(
+								"Digite 'Consultar', 'Adicionar' ou 'Apagar' para fazer alteraÃ§Ãµes nos contatos ou digite 'voltar'");
 						cliente = sc.nextLine().toLowerCase();
-						if(cliente.equals("consultar")) { // consultar contatos
-							//consulta de contatos
-							do{
+						if (cliente.equals("consultar") || cliente.equals("c")) { 
+							// consulta de contatos
+							do {
 								String contatos = usuario.consultarContatosCliente(email);
 								System.out.println(contatos);
-								if (contatos.equals("Não há Contatos")) {
+								if (contatos.equals("NÃ£o hÃ¡ contatos")) {
 									cliente = "voltar";
 								}
-								if(!contatos.equals("Não há Contatos")) {
-								System.out.println("Para enviar mensagem para um dos contatos digite o número correspondente ou digite voltar.");
-								cliente = sc.nextLine();
-								boolean isNumeric = cliente.matches("[+-]?\\d*(\\.\\d+)?");
-								
-								if (cliente.equals("voltar")) {
-									
-								}else if(isNumeric){
-									int numeroContato = Integer.parseInt(cliente);
-									String[] separarContatos;
-									contatos = usuario.consultarContatos(email);
-									separarContatos = contatos.split(", ");
+								if (!contatos.equals("NÃ£o hÃ¡ Contatos")) {
+									System.out.println(
+											"Para enviar mensagem para um dos contatos digite o nÃºmero correspondente ou digite voltar.");
+									cliente = sc.nextLine();
+									boolean isNumeric = cliente.matches("[+-]?\\d*(\\.\\d+)?");
 
-									System.out.println("Digite o assunto do e-mail: ");
-									String assunto = sc.nextLine();
-									System.out.println("Digite o corpo do e-mail:");
-									String mensagem = sc.nextLine();
+									if (cliente.equals("voltar") || cliente.equals("v")) {
 
-									String resposta = usuario.criarMensagens(email, separarContatos[numeroContato - 1], assunto, mensagem);
-									System.out.println(resposta);
-									cliente = "voltar";
-								}else {
-									System.out.println("Nenhuma opção válida selecionada.");
+									} 
+									//Enviar e-mail navegando pelos contatos
+									else if (isNumeric) {
+										int numeroContato = Integer.parseInt(cliente);
+										String[] separarContatos;
+										contatos = usuario.consultarContatos(email);
+										separarContatos = contatos.split(",");
+
+										System.out.println("Digite o assunto do e-mail: ");
+										String assunto = sc.nextLine();
+										System.out.println("Digite o corpo do e-mail:");
+										String mensagem = sc.nextLine();
+
+										String resposta = usuario.criarMensagens(email,
+												separarContatos[numeroContato - 1], assunto, mensagem);
+										System.out.println(resposta);
+										cliente = "voltar";
+									} else {
+										System.out.println("Nenhuma opÃ§Ã£o vÃ¡lida selecionada.");
+									}
 								}
-								}
-							}while(!cliente.equals("voltar"));
-							
-							
-						}else if(cliente.equals("adicionar")) { // Adicionar contatos
+								//Voltar ao menu anterior
+							} while (!cliente.equals("voltar") || cliente.equals("v"));
+							//Adicionar contatos
+						} else if (cliente.equals("adicionar")) { // Adicionar contatos
 							System.out.println("Digite o e-mail que deseja adicionar aos contatos: ");
 							String emailContatos = sc.nextLine();
 							usuario.adicionarContatos(email, emailContatos);
-						}else if(cliente.equals("apagar")) { // apagar contatos
-							System.out.println("Digite o e-mail do contato que deseja apagar:");
+							//Apagar contatos
+						} else if (cliente.equals("apagar")) { // apagar contatos
+							System.out.println("Digite o e-mail do contato que deseja apagar: ");
 							String emailApagar = sc.nextLine();
 							String emailApagado = usuario.apagarContatos(email, emailApagar);
 							System.out.println(emailApagado);
-							
-						}else if(cliente.equals("voltar")) { // voltar 
-						
-						}else {
-							System.out.println("Nenhuma opção válida selecionada. ()");
-						}					
-						
-					} while(!cliente.equals("voltar"));// fim DO contatos
-				
-				}else if(cliente.equals("emails") || cliente.equals("email")) { // opções de e-mail
+							//Retornar ao menu anterior
+						} else if (cliente.equals("voltar")) { 
+
+						} else {
+							System.out.println("Nenhuma opÃ§Ã£o vÃ¡lida selecionada.");
+						}
+
+					} while (!cliente.equals("voltar") || cliente.equals("v"));// fim DO contatos
+
+				} else if (cliente.equals("emails") || cliente.equals("email") || cliente.equals("e")) { // opï¿½ï¿½es de
+																											// e-mail
 					do {
-						System.out.println("Digite 'Consultar' para consultar seus e-mails, 'Criar' para criar um novo e-mail ou 'Voltar' para retornar ao menu anterior.");
+						System.out.println(
+								"Digite 'Consultar' para consultar seus e-mails, 'Novo' para criar um novo e-mail ou 'Voltar' para retornar ao menu anterior.");
 						cliente = sc.nextLine().toLowerCase();
-						if(cliente.equals("consultar") || cliente.equals("consulta")) {
+						//Consultar e-mails recebidos ou enviados
+						if (cliente.equals("consultar") || cliente.equals("consulta") || cliente.equals("c")) {
 							do {
-								System.out.println("Digite 'Recebidos' para ver e-mails recebidos, 'Enviados' para ver e-mails enviados ou 'Voltar' para retornar ao menu anterior");
+								System.out.println(
+										"Digite 'Recebidos' para ver e-mails recebidos, 'Enviados' para ver e-mails enviados ou 'Voltar' para retornar ao menu anterior");
 								cliente = sc.nextLine().toLowerCase();
-								if(cliente.equals("recebidos") || cliente.equals("recebido")) {
+								//Consultar e-mails recebidos
+								if (cliente.equals("recebidos") || cliente.equals("recebido") || cliente.equals("r")) {
 									String resposta = usuario.consultarMinhasMensagens(email);
 									if (resposta.equals("")) {
-										System.out.println("Você não recebeu nenhum e-mail.");
+										System.out.println("VocÃª nÃ£o recebeu nenhum e-mail.");
 									}
 									System.out.println(resposta);
-									
-								
-								}else if(cliente.equals("enviados") || cliente.equals("enviado")) {
+									//Consultar e-mail enviados
+								} else if (cliente.equals("enviados") || cliente.equals("enviado")
+										|| cliente.equals("e")) {
 									String resposta = usuario.consultarMinhasMensagensEnviadas(email);
 									if (resposta.equals("")) {
-										System.out.println("Você não enviou nenhum e-mail.");
+										System.out.println("VocÃª nÃ£o enviou nenhum e-mail.");
 									} else {
 										System.out.println(resposta);
 									}
-									
-								
-								}else if(cliente.equals("voltar")) {
-									
-								}else {
-									System.out.println("Nenhuma opção válida selecionada.");
-								}															
-							}while(!cliente.equals("voltar"));
-						}else if(cliente.equals("criar")) {
-							System.out.println(
-									"Digite 'Contatos' para enviar a partir da sua lista de contatos, digite o e-mail do destinatário para qual deseja enviar o e-mail ou 'Voltar': ");
-							String contatosOuDigitar = sc.nextLine().toLowerCase();
+									//Voltar ao menu anterior
+								} else if (cliente.equals("voltar") || cliente.equals("v")) {
 
-							if (contatosOuDigitar.equals("contatos")) {// erro aqui
+								} else {
+									System.out.println("Nenhuma opÃ§Ã£o vÃ¡lida selecionada.");
+								}
+							} while (!cliente.equals("voltar") || !cliente.equals("v"));
+							//Enviar e-mail
+						} else if (cliente.equals("novo") || cliente.equals("n")) {
+							System.out.println(
+									"Digite 'Contatos' para enviar a partir da sua lista de contatos, digite o e-mail do destinatÃ¡rio para qual deseja enviar o e-mail ou 'Voltar': ");
+							String contatosOuDigitar = sc.nextLine().toLowerCase();
+							//Enviar e-mail a partir dos contatos
+							if (contatosOuDigitar.equals("contatos") || contatosOuDigitar.equals("c")) {//
 								String contatos = usuario.consultarContatosCliente(email);
 								System.out.println(contatos);
 								System.out.println(
 										"\n\nPara Enviar um e-mail digite o numero do contato ou 'voltar' para retornar ao inicio. ");
 								String enviarMensagemContatos = sc.nextLine().toLowerCase();
 								boolean isNumeric = enviarMensagemContatos.matches("[+-]?\\d*(\\.\\d+)?");
-
-								if (enviarMensagemContatos.contains("voltar")) {
-
-								} else if (isNumeric) {
+							//Voltar ao menu anterior
+								if (enviarMensagemContatos.contains("voltar") || cliente.equals("v")) {
+							
+								} 
+							//Enviar e-mail navegando pelos contatos
+								else if (isNumeric) {
 									int numeroContato = Integer.parseInt(enviarMensagemContatos);
 									String[] separarContatos;
 									contatos = usuario.consultarContatos(email);
@@ -167,14 +187,16 @@ public class Usuario {
 
 									System.out.println("Digite o assunto do e-mail: ");
 									String assunto = sc.nextLine();
-									System.out.println("Digite o corpo do e-mail:");
+									System.out.println("Digite o corpo do e-mail: ");
 									String mensagem = sc.nextLine();
 
-									String resposta = usuario.criarMensagens(email, separarContatos[numeroContato - 1], assunto,
-											mensagem);
+									String resposta = usuario.criarMensagens(email, separarContatos[numeroContato - 1],
+											assunto, mensagem);
 									System.out.println(resposta);
 								}
-							}else {
+							} 
+							//Envio de e-mail a partir de um e-mail digitado pelo cliente
+							else {
 								System.out.println("Digite o assunto do e-mail: ");
 								String assunto = sc.nextLine();
 								System.out.println("Digite o corpo do e-mail: ");
@@ -182,25 +204,23 @@ public class Usuario {
 								String resposta = usuario.criarMensagens(email, contatosOuDigitar, assunto, mensagem);
 								System.out.println(resposta);
 							}
-					
-						
-							
-						}else if(cliente.equals("voltar")) {
-							
+							//Voltar ao menu anterior
+						} else if (cliente.equals("voltar") || cliente.equals("v")) {
+
 						}
-						
-					}while(!cliente.equals("voltar"));
-				}else if(cliente.equals("desconectar")) { // desconectar
-					
-				}else {
-					System.out.println("Nenhuma opção válida foi digitada"); // opção inválida
+
+					} while (!cliente.equals("voltar") || !cliente.equals("v"));
+				} else if (cliente.equals("desconectar") || cliente.equals("d")) { // desconectar
+
+				} else {
+					System.out.println("Nenhuma opÃ§Ã£o vÃ¡lida foi digitada"); // opï¿½ï¿½o invï¿½lida
 				}
-	
-			}while(!cliente.equals("desconectar"));
-			System.out.println("Obrigado por usar nosso e-mail. \nAté breve.");
+
+			} while (!cliente.equals("desconectar"));
+			System.out.println("Obrigado por usar nosso e-mail. \nAtÃ© breve.");
 			sc.close();
 		} catch (Exception e) {
-			System.out.println("Erro: " + e.getMessage());
+			System.err.println("Erro: " + e.getMessage());
 		}
 	}
 }
