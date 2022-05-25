@@ -13,7 +13,7 @@ public class Usuario {
 			String email = "";
 			boolean loginSucesso = false;
 
-			// Conex�o
+			// Conexão
 			UsuarioDao usuario = (UsuarioDao) Naming.lookup("rmi://LOCALHOST:3333/Email");
 
 			System.out.println("========= Bem Vindo =========");
@@ -21,7 +21,7 @@ public class Usuario {
 					"++ Dica: Para facilitar a navegação você pode usar apenas a primeira letra da palavra. ++");
 
 			while (loginSucesso == false) {
-				System.out.println("Digite 'criar' para criar uma conta ou 'login' para efetuar login:");
+				System.out.println("\n\nDigite 'criar' para criar uma conta ou 'login' para efetuar login:");
 				String cliente = sc.nextLine().toLowerCase();
 				switch (cliente) {
 				// Criar conta
@@ -98,7 +98,7 @@ public class Usuario {
 
 										System.out.println("Digite o assunto do e-mail: ");
 										String assunto = sc.nextLine();
-										System.out.println("Digite o corpo do e-mail:");
+										System.out.println("Digite o corpo do e-mail: ");
 										String mensagem = sc.nextLine();
 
 										String resposta = usuario.criarMensagens(email,
@@ -132,24 +132,27 @@ public class Usuario {
 
 					} while (!cliente.equals("voltar"));// fim DO contatos
 
-				} else if (cliente.equals("emails") || cliente.equals("email") || cliente.equals("e")) { // op��es de
+				} else if (cliente.equals("emails") || cliente.equals("email") || cliente.equals("e")) { // opções de
 																											// e-mail
 					do {
 						System.out.println(
 								"Digite 'Consultar' para consultar seus e-mails, 'Novo' para criar um novo e-mail ou 'Voltar' para retornar ao menu anterior.");
 						cliente = sc.nextLine().toLowerCase();
+						//Consultar e-mails
 						if (cliente.equals("consultar") || cliente.equals("consulta") || cliente.equals("c")) {
 							do {
 								System.out.println(
 										"Digite 'Recebidos' para ver e-mails recebidos, 'Enviados' para ver e-mails enviados ou 'Voltar' para retornar ao menu anterior");
 								cliente = sc.nextLine().toLowerCase();
+								//E-mails recebidos
 								if (cliente.equals("recebidos") || cliente.equals("recebido") || cliente.equals("r")) {
 									String resposta = usuario.consultarMinhasMensagens(email);
 									if (resposta.equals("")) {
 										System.out.println("Você não recebeu nenhum e-mail.");
 									}
 									System.out.println(resposta);
-								} else if (cliente.equals("enviados") || cliente.equals("enviado")
+								} //E-mail enviados
+								else if (cliente.equals("enviados") || cliente.equals("enviado")
 										|| cliente.equals("e")) {
 									String resposta = usuario.consultarMinhasMensagensEnviadas(email);
 									if (resposta.equals("")) {
@@ -157,7 +160,8 @@ public class Usuario {
 									} else {
 										System.out.println(resposta);
 									}
-								} else if (cliente.equals("voltar") || cliente.equals("v")) {
+								} //Voltar ao menu anterior
+								else if (cliente.equals("voltar") || cliente.equals("v")) {
 									cliente = "voltar";
 								} else {
 									System.out.println("Nenhuma opção válida selecionada.");
@@ -208,21 +212,19 @@ public class Usuario {
 								System.out.println(resposta);
 							}
 
-						} else if (cliente.equals("voltar") || cliente.equals("v")) {
-
+						} //Voltar ao menu anterior
+						else if (cliente.equals("voltar") || cliente.equals("v")) {
 							cliente = "voltar";
 						} else {
 							System.out.println("Nenhuma opção válida selecionada.");
 						}
-
 					} while (!cliente.equals("voltar"));
 
 				}
-
 				else if (cliente.equals("desconectar") || cliente.equals("d")) { // desconectar
-
+					cliente = "desconectar";
 				} else {
-					System.out.println("Nenhuma opção válida foi digitada"); // op��o inv�lida
+					System.out.println("Nenhuma opção válida foi digitada"); // opçõeo inválida
 				}
 
 			} while (!cliente.equals("desconectar"));
