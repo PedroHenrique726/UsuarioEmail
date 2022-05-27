@@ -16,7 +16,7 @@ public class Usuario {
 			// Conexão
 			UsuarioDao usuario = (UsuarioDao) Naming.lookup("rmi://LOCALHOST:3333/Email");
 
-			System.out.println("========= Bem Vindo =========");
+			System.out.println("========= Bem Vindo ao Gambiarra e-mail =========");
 			System.out.println(
 					"++ Dica: Para facilitar a navegação você pode usar apenas a primeira letra da palavra. ++");
 
@@ -44,9 +44,7 @@ public class Usuario {
 					System.out.println("Digite sua senha: ");
 					senha = sc.nextLine();
 
-					if (!email.contains("@email.com")) {
-						email += "@email.com";
-					}
+				
 					loginSucesso = usuario.login(email, senha);
 
 					if (!loginSucesso) {
