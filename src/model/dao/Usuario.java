@@ -10,6 +10,7 @@ public class Usuario {
 		Scanner sc = new Scanner(System.in);
 
 		try {
+			int idLogin = 0;
 			String email = "";
 			boolean loginSucesso = false;
 
@@ -19,7 +20,7 @@ public class Usuario {
 			System.out.println("========= Bem Vindo ao Gambiarra e-mail =========");
 			System.out.println(
 					"++ Dica: Para facilitar a navegação você pode usar apenas a primeira letra da palavra. ++");
-
+			
 			while (loginSucesso == false) {
 				System.out.println("\n\nDigite 'criar' para criar uma conta ou 'login' para efetuar login:");
 				String cliente = sc.nextLine().toLowerCase();
@@ -44,12 +45,18 @@ public class Usuario {
 					System.out.println("Digite sua senha: ");
 					senha = sc.nextLine();
 
-				
+					if (!email.contains("@gambmail.com")) {
+						email += "@gambmail.com";
+					}
 					loginSucesso = usuario.login(email, senha);
-
+					
+					
 					if (!loginSucesso) {
 						System.out.println("Email ou senha digitado errado!");
 					} else {
+						
+						idLogin = usuario.idLogin(email);
+						System.out.println(idLogin);
 						nome = usuario.findNameByEmail(email);
 						System.out.println("Login efetuado! Bem Vindo " + nome + "\n");
 					}
@@ -73,7 +80,7 @@ public class Usuario {
 						if (cliente.equals("consultar") || cliente.equals("c")) {
 							// consulta de contatos
 							do {
-								String contatos = usuario.consultarContatosCliente(email);
+								String contatos = usuario.consultarContatosCliente(idLogin);
 								System.out.println(contatos);
 								if (contatos.equals("Não há contatos")) {
 									cliente = "voltar";
@@ -91,7 +98,7 @@ public class Usuario {
 									else if (isNumeric) {
 										int numeroContato = Integer.parseInt(cliente);
 										String[] separarContatos;
-										contatos = usuario.consultarContatos(email);
+										contatos = usuario.consultarContatos(idLogin);
 										separarContatos = contatos.split(",");
 
 										System.out.println("Digite o assunto do e-mail: ");
@@ -99,7 +106,7 @@ public class Usuario {
 										System.out.println("Digite o corpo do e-mail: ");
 										String mensagem = sc.nextLine();
 
-										String resposta = usuario.criarMensagens(email,
+										String resposta = usuario.criarMensagens(idLogin,
 												separarContatos[numeroContato - 1], assunto, mensagem);
 										System.out.println(resposta);
 										cliente = "voltar";
@@ -114,12 +121,12 @@ public class Usuario {
 						} else if (cliente.equals("adicionar") || cliente.equals("a")) { // Adicionar contatos
 							System.out.println("Digite o e-mail que deseja adicionar aos contatos: ");
 							String emailContatos = sc.nextLine();
-							System.out.println(usuario.adicionarContatos(email, emailContatos));
+							System.out.println(usuario.adicionarContatos(idLogin, emailContatos));
 							// Apagar contatos
 						} else if (cliente.equals("deletar") || cliente.equals("d")) { // apagar contatos
 							System.out.println("Digite o e-mail do contato que deseja apagar: ");
 							String emailApagar = sc.nextLine();
-							String emailApagado = usuario.apagarContatos(email, emailApagar);
+							String emailApagado = usuario.apagarContatos(idLogin, emailApagar);
 							System.out.println(emailApagado);
 							// Retornar ao menu anterior
 						} else if (cliente.equals("voltar") || cliente.equals("v")) {
@@ -144,7 +151,7 @@ public class Usuario {
 								cliente = sc.nextLine().toLowerCase();
 								//E-mails recebidos
 								if (cliente.equals("recebidos") || cliente.equals("recebido") || cliente.equals("r")) {
-									String resposta = usuario.consultarMinhasMensagens(email);
+									String resposta = usuario.consultarMinhasMensagens(idLogin);
 									if (resposta.equals("")) {
 										System.out.println("Você não recebeu nenhum e-mail.");
 									}
@@ -152,7 +159,7 @@ public class Usuario {
 								} //E-mail enviados
 								else if (cliente.equals("enviados") || cliente.equals("enviado")
 										|| cliente.equals("e")) {
-									String resposta = usuario.consultarMinhasMensagensEnviadas(email);
+									String resposta = usuario.consultarMinhasMensagensEnviadas(idLogin);
 									if (resposta.equals("")) {
 										System.out.println("Você não enviou nenhum e-mail.");
 									} else {
@@ -171,7 +178,7 @@ public class Usuario {
 									"Digite 'Contatos' para enviar a partir da sua lista de contatos, digite o e-mail do destinatário para qual deseja enviar o e-mail ou 'Voltar': ");
 							String contatosOuDigitar = sc.nextLine().toLowerCase();
 							if (contatosOuDigitar.equals("contatos") || contatosOuDigitar.equals("c")) {//
-								String contatos = usuario.consultarContatosCliente(email);
+								String contatos = usuario.consultarContatosCliente(idLogin);
 								System.out.println(contatos);
 								System.out.println(
 										"\n\nPara Enviar um e-mail digite o numero do contato ou 'voltar' para retornar ao inicio. ");
@@ -185,7 +192,7 @@ public class Usuario {
 								else if (isNumeric) {
 									int numeroContato = Integer.parseInt(enviarMensagemContatos);
 									String[] separarContatos;
-									contatos = usuario.consultarContatos(email);
+									contatos = usuario.consultarContatos(idLogin);
 									separarContatos = contatos.split(",");
 
 									System.out.println("Digite o assunto do e-mail: ");
@@ -193,7 +200,7 @@ public class Usuario {
 									System.out.println("Digite o corpo do e-mail: ");
 									String mensagem = sc.nextLine();
 
-									String resposta = usuario.criarMensagens(email, separarContatos[numeroContato - 1],
+									String resposta = usuario.criarMensagens(idLogin, separarContatos[numeroContato - 1],
 											assunto, mensagem);
 									System.out.println(resposta);
 								}
@@ -206,7 +213,7 @@ public class Usuario {
 								String assunto = sc.nextLine();
 								System.out.println("Digite o corpo do e-mail: ");
 								String mensagem = sc.nextLine();
-								String resposta = usuario.criarMensagens(email, contatosOuDigitar, assunto, mensagem);
+								String resposta = usuario.criarMensagens(idLogin, contatosOuDigitar, assunto, mensagem);
 								System.out.println(resposta);
 							}
 
