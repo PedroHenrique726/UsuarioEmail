@@ -11,7 +11,7 @@ public interface UsuarioDao extends Remote{
 	//usuario
 	public abstract String criarUsuario(String name, String senha, String email) throws RemoteException;
 	public abstract boolean login(String email, String senha) throws RemoteException;
-	public abstract int idLogin(String email);
+	public abstract int idLogin(String email) throws RemoteException;
 	
 	//contatos
 	public abstract String adicionarContatos(int idLogin, String emailAdicionado) throws RemoteException;
@@ -21,7 +21,7 @@ public interface UsuarioDao extends Remote{
 	
 	
 	//consultas	
-	public abstract String findNameByEmail(String email) throws RemoteException;
+	public abstract String findNameByEmail(int idLogin) throws RemoteException;
 	public abstract String findById(int idLogin) throws RemoteException;
 	public abstract int findIdByEmail(int idLogin) throws RemoteException;
 	
