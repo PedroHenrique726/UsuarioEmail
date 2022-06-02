@@ -3,7 +3,7 @@ package model.dao;
 import java.rmi.Naming;
 import java.util.Scanner;
 
-public class Usuario {
+public class Cliente {
 
 	public static void main(String[] args) {
 
@@ -21,7 +21,7 @@ public class Usuario {
 			System.out.println(
 					"++ Dica: Para facilitar a navegacao voce pode usar apenas a primeira letra da palavra. ++");
 
-			while (loginSucesso == false) {
+			while (loginSucesso == false) {							
 				System.out.println("\n\nDigite 'criar' para criar uma conta ou 'login' para efetuar login:");
 				String cliente = sc.nextLine().toLowerCase();
 				switch (cliente) {
